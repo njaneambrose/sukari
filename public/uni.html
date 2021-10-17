@@ -1,0 +1,74 @@
+<html ng-app="Sukari App">
+    <head>
+        <title>Sukari dating| Don't be Boring date the Sukari way</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Serif:ital@0;1&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="./stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="./stylesheets/jquery-ui.min.css">
+        <link rel="stylesheet" href="./stylesheets/style.css">
+        <script src="./javascripts/angular.min.js"></script>
+        <script src="./javascripts/app.js"></script>
+        <style>
+          body{
+            color: white;
+          }
+        </style>
+      </head>
+      <body class="container" ng-controller="Forms">
+          <div class="col-xs-12 col-lg-12 login-form" ng-show="{{lo}}">
+            <h3>Login to sukari dating</h3>
+            <label>
+              <input class="form-control" name="user" placeholder="username">
+            </label>
+            <label>
+              <input type="password" class="form-control"  name="pass" placeholder="password">
+            </label>
+            <button class="btn btn-default" data-action="login">Login</button>
+          </div>
+          <div class="col-xs-12 col-lg-12 join-form" ng-show="{{jo}}">
+            <h3>Join sukari dating toady</h3>
+            <label>
+              <input type="email" class="form-control"  name="email" placeholder="Email address" required>
+            </label>
+            <label>
+              <input class="form-control" name="user" placeholder="username" required>
+            </label>
+            <label>
+              <input type="password" class="form-control"  name="pass" placeholder="password" required>
+            </label>
+            <button class="btn btn-default" data-action="join">Join</button>
+          </div>
+          <div class="col-xs-12 col-lg-12 recover-form" ng-show="{{re}}">
+            <h3>Enter your email address or username to find your acccount</h3>
+            <label>
+              <input class="form-control" name="user" placeholder="username / email">
+            </label>
+            <button class="btn btn-default" data-action="recover">Find my account</button>
+          </div>
+          <div class="col-xs-12 col-lg-12 code-form" ng-show="{{co}}">
+            <h3>Enter the code sent to your email address:</h3>
+            <label>
+              <input class="form-control" name="code" placeholder="Enter the code sent to your email">
+            </label>
+            <button class="btn btn-default" data-action="code">Recover my account</button>
+          </div>
+          <div class="col-xs-12 col-lg-12 update-form" ng-show="{{up}}">
+            <h3>Update the password for your account</h3>
+            <label>
+              <input type="password" class="form-control" name="pas" placeholder="Enter your new password">
+            </label>
+            <label>
+              <input type="password" class="form-control" name="pass" placeholder="Re-type your password">
+            </label>
+            <button class="btn btn-default" data-action="update">Recover my account</button>
+          </div>
+      </body>
+    <script src="./javascripts/jquery-3.5.1.min.js"></script>
+    <script src="./javascripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="./javascripts/skroll.min.js"></script>
+    <script src="./javascripts/bootstrap.min.js"></script>
+    <script src="./javascripts/script2.js"></script>
+</html>

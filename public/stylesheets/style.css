@@ -1,8 +1,99 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+div.preloader{
+  text-align: center;
+  padding-top: 180px;
+  background-color:white;
+  min-height: 100%;
+  color: black;
+  position: fixed;
+  min-width: 100%;
+  z-index: 100;
 }
 
-a {
-  color: #00B7FF;
+body{
+  background: #333;
+  font-family: 'Montserrat',sans-serif;
+}
+
+
+h1.a-b{
+  font-family: 'Noto Serif',sans-serif;
+  font-style: italic;
+  font-size: 55px;
+  color: black;
+  text-align: center;
+}
+
+img.load-img{
+  margin-top: 50px;
+}
+
+div.banner-nav{
+  background: gold;
+}
+div.options-banner,div.ge-banner{
+  background: #333;
+  color: white;
+}
+div.options-banner{
+  border-right: 1px solid #aaa;
+}
+div.ge-banner{
+  border-left: 1px solid #aaa;
+}
+
+div.ge-banner > label{
+  color: white;
+  display: block;
+}
+
+ul.pager{
+  font-weight: bold;
+}
+
+#age{
+  color: #333;
+}
+
+
+ul.pager a.tp-link{
+  display: block;
+  background: gold;
+  text-align: center;
+  color: black;
+}
+
+label.ge{
+  display: block;
+}
+
+div#slider{
+  margin-top: 30px;
+}
+
+div.suggest-banner{
+  color: white;
+}
+
+button.find-btn{
+  margin-top: 30px;
+}
+
+img.tp-img,img.tp-img2{
+  display: inline;
+  margin-left: 10px;
+  width: 17px;
+}
+
+div.single-suggest{
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 10px;
+}
+
+@media(max-width: 425px){
+  h1.a-b{
+    font-size: 45px;
+  }
+
+  ul.pager{margin-top: 10px;margin-bottom: 5px;}
+
 }
