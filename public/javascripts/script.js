@@ -32,7 +32,6 @@ $(function(){
  }
  // pre - set keys
   
-
   setTimeout(function(){
       $('div.preloader').fadeOut(600);
   },3000)
@@ -119,12 +118,12 @@ $(function(){
               `<div class="col-lg-12 col-xs-12 single-suggest"><p>${e.name}</p><p>${e.desp}</p>
               <p><span>${ge_keys[JSON.stringify(e.gender)]} -></span>${e.age} -> ${e.location}</p>
               <span>${tp_keys[JSON.stringify(e.tp)]}</span><span> -> ${or_keys[JSON.stringify(e.or)]}</span>
-              <div class="col-xs-10" style="margin-top: 10px">
+              <div class="row"><div class="col-xs-10" style="margin-top: 10px">
                   <input data-comment="${e.aid}" class="form-control" placeholder="Leave a commment or drop your contact">
               </div>
               <div class="col-xs-2">
                   <button data-toggle="comment" data-commentz="${e.aid}" class="btn btn-default">Send</button>
-              </div>
+              </div></div>
               </div>`
             )
             $(`[data-toggle="comment"][data-commentz="${e.aid}"]`).click(function(){
@@ -153,7 +152,7 @@ $(function(){
               `<div class="col-lg-12 col-xs-12 single-suggest"><p>${e.name}</p><p>${e.desp}</p>
               <p><span>${ge_keys[JSON.stringify(e.gender)]} -></span>${e.age} -> ${e.location}</p>
               <span>${tp_keys[JSON.stringify(e.tp)]}</span><span> -> ${or_keys[JSON.stringify(e.or)]}</span>
-              <div class="col-xs-10" style="margin-top: 10px">
+              <div class="row"><div class="col-xs-10" style="margin-top: 10px">
                   <input data-comment="${e.aid}" class="form-control" placeholder="Leave a commment or drop contact">
               </div>
               <div class="col-xs-2">
@@ -182,7 +181,8 @@ $(function(){
     // remmmeber user options using local storage
   }
 
-  $('[data-suggest="tp"]').click(function(){
+  $('[data-suggest="tp"]').click(function(event){
+      event.preventDefault();
       if(window.innerWidth > 425){
         $('img.tp-img').remove();
         $(this).append('<img src="./images/checked.png" class="img-responsive tp-img" data-check="checked">')

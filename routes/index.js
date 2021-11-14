@@ -4,6 +4,7 @@ var pa = require('../pat');
 var db = require('./db');
 var path = require('path');
 var uuid = require('uuid-by-string');
+const { Console } = require('console');
 
 
 
@@ -140,7 +141,7 @@ router.get('/login',(req,res)=>{
             }else if(data.rows.length === 0){
                 res.send('002')
             }else{
-              res.send('003');
+              res.redirect('/0');
             }
           })
         }
@@ -161,7 +162,7 @@ router.post('/login',(req,res)=>{
       }else if(rows.rows.length === 0){
         res.send('001')
       }else{
-        var h = uuid(bo.p+rows.rows[0].uuid);
+        var h = uuid(rows.rows[0].uuid+bo.p);
         db.query('SELECT uname,uuid FROM users WHERE pass=$1::text AND uname=$2::text LIMIT 1',[h,bo.u],
         function(err,data) {
           if(err){
@@ -190,16 +191,25 @@ router.post('/join',(req,res)=>{
   var bo = req.body;
   var d = uuid(new Date().toString())
   var pass = uuid(d+bo.p)
-  db.query('INSERT INTO users(uname,pass,uuid,email) VALUES($1::text,$2::text,$3::text,$4::text)',[bo.u,pass,d,bo.e],
-  function(err){
-      if(err){
-        console.log(e)
-      }else{
-        res.send('DONE');
-        res.cookie('uuid',d,{expires: new Date(Date.now() + 900000000),httpOnly: true});
-        res.cookie('ga',bo.u,{expires: new Date(Date.now() + 900000000),httpOnly: true});
-      }
-  });
+  db.query('SELECT uname FROM users WHERE uname=$1::text',[bo.u],
+  function(err,d){
+    if(err){
+      console.log(err)
+    }else if(d.rows.length !== 0){
+        res.send('001');
+    }else{
+      db.query('INSERT INTO users(uname,pass,uuid,email) VALUES($1::text,$2::text,$3::text,$4::text)',[bo.u,pass,d,bo.e],
+      function(err){
+          if(err){
+            console.log(e)
+          }else{
+            res.cookie('uuid',d,{expires: new Date(Date.now() + 900000000),httpOnly: true});
+            res.cookie('ga',bo.u,{expires: new Date(Date.now() + 900000000),httpOnly: true});
+            res.send('DONE');
+          }
+      });
+    }
+  })
 
 });
 
@@ -230,8 +240,8 @@ router.post('/recover',(req,res)=>{
                 if(err){
                   console.log(err);
                 }else{
-                  res.cookie('r',data.rows[0].uname,{expires: new Date(Date.now() + 180000),httpOnly: true}); //expires in 30 minutes
-                  res.send('003');
+                  res.cookie('r',data.rows[0].uname,{expires: new Date(Date.now() + 720000),httpOnly: true}); //expires in 30 minutes
+                  res.send('002');
                 }
               })
             }
@@ -248,7 +258,6 @@ router.get('/verify',(req,res)=>{
 });
 
 router.post('/verify',(req,res)=>{
-  console.log(req.body,req.cookies);
   if(req.cookies.r === undefined){
     res.send('001');
   }else{
@@ -259,7 +268,7 @@ router.post('/verify',(req,res)=>{
       }else if(data.rows.length === 0){
         res.send('001')
       }else{
-        res.send(`succesfully recovered ${req.cookies.r}`);
+        res.send('002')
       }
     });
   }
@@ -276,23 +285,242 @@ router.post('/update',(req,res)=>{
   }else{
     var bo = req.body;
     var h = uuid(new Date().toString());
-    var pass = uuid(bo.pass+h);
+    var pass = uuid(h+bo.pass);
     db.query('UPDATE users SET pass=$1::text,tmsp=now(),uuid=$3::text WHERE uname=$2::text',[pass,req.cookies.r,h],
     function(err) {
       if(err){
         console.log(err);
       }else{
-          res.cookie('r','',{expires: new Date(Date.now() + 5),httpOnly: true});
-          res.send('Updated password')
+          res.cookie('uuid',h,{expires: new Date(Date.now() + 900000000),httpOnly: true});
+          res.cookie('ga',req.cookies.r,{expires: new Date(Date.now() + 900000000),httpOnly: true});
+          res.cookie('r','',{expires: new Date(Date.now() + 0),httpOnly: true});
+          res.send('002');
       }
     })
   }
 });
 
+function verify(user,hash,back){
+  db.query('SELECT uname,uid FROM users WHERE uname=$1::text AND uuid=$2::text LIMIT 1',[user,hash],
+  function(err,data){
+    if(err){
+      console.log(err);
+    }else if(data.rows.length === 0){
+      back.call(this,false);
+    }else{
+      back.call(this,true,data.rows[0].uid)
+    }
+  })
+}
 // User account
 
 router.get('/0',(req,res)=>{
-  res.sendFile(path.join(pa, '/public/0.html'))
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+      verify(req.cookies.ga,req.cookies.uuid,function(val){
+          if(val){
+            res.sendFile(path.join(pa, '/public/0.html'));
+          }else{
+            res.redirect('/');
+          }
+      });
+  }else{
+    res.redirect('/')
+  }
 });
+
+// Extract user ads
+
+router.get('/0/ads',(req,res)=>{
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val,id){
+        if(val){
+            db.query('SELECT * FROM ads WHERE uid=$1::integer ORDER BY tmsp DESC LIMIT 10',[id],
+            function(err,data){
+              if(err){
+                Console.log(err)
+              }else{
+                data.rows.forEach(e => {
+                  db.query('SELECT count(cid) AS no FROM comments WHERE adid=$1::integer',[e.aid],
+                  function(err,da){
+                    if(err){
+                      console.log(err);
+                    }else{
+                      e.c = da.rows[0].no;
+                    }
+                  })
+                });
+                setTimeout(function(){
+                  res.send(data.rows);
+                },300)
+              }
+            })
+        }else{
+          res.redirect('/');
+        }
+    });
+}else{
+  res.send('000')
+}
+});
+
+router.get('/0/ads/page/:page',(req,res)=>{
+    if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+      verify(req.cookies.ga,req.cookies.uuid,function(val,id){
+        if(val){
+          var off = (parseInt(req.params.page)-1)*10
+          db.query('SELECT * FROM ads WHERE uid=$1::integer ORDER BY tmsp DESC OFFSET $2 LIMIT 10',[id,off],
+          function(err,data){
+            if(err){
+              Console.log(err)
+            }else{
+              data.rows.forEach(e => {
+                db.query('SELECT cid AS no FROM comments WHERE adid=$1::integer',[e.aid],
+                function(err,da){
+                  if(err){
+                    console.log(err);
+                  }else{
+                    e.c = da.rows.length;
+                  }
+                })
+              });
+              setTimeout(function(){
+                res.send(data.rows);
+              },300)
+            }
+          })
+        }else{
+          res.send('000')
+        }
+      })
+    }
+});
+
+
+// create ad [GET]
+router.get('/0/ads/create',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          res.sendFile(path.join(pa, '/public/1.html'));
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+
+//create ad [POST]
+router.post('/0/ads/create',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          res.send('0003');
+          console.log(req.body);
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+
+//edit ad [GET]
+
+router.get('/0/ads/edit',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          res.sendFile(path.join(pa, '/public/1.html'));
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+//edit ad [GET]
+router.get('/0/ads/edit/:q',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          db.query('SELECT * FROM ads WHERE aid=$1::integer LIMIT 1',[req.params.q],
+            function(err,data){
+              if(err){
+                console.log(err)
+              }else{
+                res.send(data.rows);
+              }
+            })
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+//edit ad [POST]
+router.post('/0/ads/edit/:q',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+         res.send('000');
+         console.log(req.body);
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+//delete ad[GET]
+
+router.get('/0/ads/delete/:q',function(req,res){
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          console.log(req.params.q);
+         res.send('000');
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+});
+
+router.get('/0/ads/c/:c',(req,res)=>{
+  if(req.cookies.ga !== undefined && req.cookies.uuid !== undefined){
+    verify(req.cookies.ga,req.cookies.uuid,function(val){
+        if(val){
+          db.query('SELECT * FROM comments WHERE adid=$1::integer ORDER BY tmsp DESC LIMIT 30 ',[req.params.c],function(err,data){
+            if(err){
+              console.log(err)
+            }else{
+              res.send(data.rows);
+            }
+          })
+        }else{
+          res.send('000');
+        }
+    });
+  }else{
+    res.send('000')
+  }
+
+});
+
+
 
 module.exports = router;

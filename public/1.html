@@ -1,0 +1,95 @@
+<html ng-app="Sukari App">
+    <head>
+        <title>Sukari dating| Don't be Boring date the Sukari way</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Serif:ital@0;1&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <script src="/javascripts/angular.min.js"></script>
+        <script src="/javascripts/app.js"></script>
+      </head>
+      <body class="container">
+         <div class="sugar-form col-lg-6 col-lg-offset-3">
+            <h2 style="margin-bottom: 12px;" class="text-center">Sukari dating</h2>
+            <form class="form-horizontal" ng-controller="Ed" data-action="{{action}}" data-val="{{v}}">
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Name</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <input class="form-control" name="nm" type="text" placeholder="Enter your name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Age</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <input class="form-control" name="ag" type="number" placeholder="Enter your age">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Wya?</label>
+                    </div>
+                    <div class="col-xs-10"><input class="form-control" name="lc" type="text" placeholder="Wya?"></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Gender</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <select name="ge" class="form-control">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Your sugar</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <select name="tp" class="form-control">
+                            <option selected="selected">Long-term relationship</option>
+                            <option>Short-term relationship</option>
+                            <option>One Date</option>
+                            <option>Hook up</option>
+                            <option>Sponsor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <label>Preference</label>
+                    </div>
+                    <div class="col-xs-10">
+                        <select name="or" class="form-control">
+                            <option selected="selected">Straight</option>
+                            <option>Bi</option>
+                            <option>Invert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Say something.........</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <textarea class="form-control" rows="5" name="dp" placeholder="Tell us something.........."></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-default" ng-show={{ed}} data-action="adedit" data-val="{{v}}">Edit</button>
+                <button class="btn btn-default" ng-show={{cr}} data-action="cr-ad">Create</button>
+            </form>
+         </div> 
+    </body>
+    <script src="/javascripts/jquery-3.5.1.min.js"></script>
+    <script src="/javascripts/skroll.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/script2.js"></script>
+</html>    
+    

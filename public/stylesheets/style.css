@@ -1,16 +1,28 @@
 div.preloader{
   text-align: center;
   padding-top: 180px;
-  background-color:white;
   min-height: 100%;
+  background: #fff;
   color: black;
   position: fixed;
   min-width: 100%;
   z-index: 100;
 }
+div.preloader:after{
+  background: url(../images/pattern_1.svg);
+  content: "";
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: 0;
+}
 
 body{
-  background: #333;
+  background: url(../images/Sprinkle.svg) repeat center;
   font-family: 'Montserrat',sans-serif;
 }
 
@@ -28,21 +40,31 @@ img.load-img{
 }
 
 div.banner-nav{
-  background: gold;
+  background: transparent;
 }
 div.options-banner,div.ge-banner{
-  background: #333;
-  color: white;
+  background: #eeeeeea6;
+  padding-bottom: 20px;
+  box-shadow: 0 2px 13px 0 rgba(0,12,36,.16);
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
-div.options-banner{
-  border-right: 1px solid #aaa;
+
+div.options-banner.affix{
+    top: 9px;
+    left: 50%;
+    z-index: 100;
 }
-div.ge-banner{
-  border-left: 1px solid #aaa;
+
+div.ge-banner.affix{
+  top: 9px;
+  left: 73%;
+  z-index: 100;
 }
 
 div.ge-banner > label{
-  color: white;
+  
   display: block;
 }
 
@@ -57,7 +79,7 @@ ul.pager{
 
 ul.pager a.tp-link{
   display: block;
-  background: gold;
+  background: transparent;
   text-align: center;
   color: black;
 }
@@ -70,7 +92,18 @@ div#slider{
   margin-top: 30px;
 }
 
-div.suggest-banner{
+div.hol-1{
+  border-top: 1px solid #aaa;
+}
+
+div.hol-2{
+  background: rgb(0,12,36);
+  background: linear-gradient(45deg, rgba(0,12,36,1) 0%, rgba(142,8,51,1) 22%, rgba(7,8,0,1) 100%);
+  color: #fff;
+}
+
+div.hol-2 ul.pager li a{
+  background: transparent;
   color: white;
 }
 
@@ -87,6 +120,22 @@ img.tp-img,img.tp-img2{
 div.single-suggest{
   border-bottom: 1px solid #aaa;
   padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+div.single-suggest button{
+  margin-left: -20px;
+  margin-top: 10px;
+}
+
+div.user-ads{
+  color: black;
+  background: white;
+  padding-top: 20px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin-top: 20px;
+  padding-bottom: 30px;
 }
 
 @media(max-width: 425px){
@@ -96,4 +145,53 @@ div.single-suggest{
 
   ul.pager{margin-top: 10px;margin-bottom: 5px;}
 
+  div.banner-nav{
+    padding-bottom: 20px;
+  }
+
+}
+
+div.suggest-banner{
+  padding-top: 20px;
+  background: white;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
+
+#create.affix{
+  left: 10%;
+  top: 60%;
+  z-index: 100;
+}
+
+#create.affix ul.pager li a{
+  border-color: black;
+  color: black;
+}
+
+p#error{
+  margin-top: 10px;
+  color: red;
+}
+
+div.sugar-form{
+  margin-top: 30px;
+  padding-top: 8px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  background: white;
+  box-shadow: 2px 3px 3px 3px rgba(0,0,0,.32);
+}
+
+div.line{
+  border-top: 1px solid #ccc;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+p.comment{
+  margin-left: 15px;
+  font-size: 12px;
+  color: #aaa;
 }
